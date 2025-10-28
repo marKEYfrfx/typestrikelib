@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "target": "es2022",
+    "module": "ESNext",
+    "lib": ["es2022"],
+
+    /* Strict Type-Checking */
+    "strict": true,
+
+    /* Module Resolution */
+    "moduleResolution": "node",
+
+    /* Emitting Files */
+    "noEmit": true, // We'll let esbuild handle file creation.
+    "noEmitOnError": true,
+
+    /* Project Structure */
+    "rootDir": "./src"
+  },
+  "include": [
+    "./src/**/*.ts",      // Check all .ts files in the 'src' directory.
+    "./point_script.d.ts" // Include the CS2 API definitions for type-checking.
+  ]
+}

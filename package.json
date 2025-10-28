@@ -1,0 +1,17 @@
+{
+  "name": "typestrikelibrary",
+  "version": "1.0.0",
+  "description": "TypeScript Library for scripting in Counter-Strike 2",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --outfile=scripts/bundle.js --external:cs_script/point_script --format=esm --minify",
+    "watch": "esbuild src/index.ts --bundle --outfile=scripts/bundle.js --external:cs_script/point_script --format=esm --minify --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.20.2",
+    "typescript": "^5.4.5"
+  }
+}
