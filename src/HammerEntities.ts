@@ -1,4 +1,5 @@
 import { Instance, Entity, BaseModelEntity} from "cs_script/point_script";
+import { IDebuggable } from "./CDebugMenu";
 
 
 export class CFuncTrackTrain extends Entity{
@@ -20,8 +21,31 @@ export class CFuncTrackTrain extends Entity{
     }
 }
 
-export class CPropPhysicsMultiplayer extends BaseModelEntity {
+export class CPropPhysicsMultiplayer extends BaseModelEntity implements IDebuggable {
     
+    public ignite(): void {
+
+    }
+    /**
+     * The title for the entire column.
+     */
+    debugColumnTitle(): string {
+        return "prop_physics_multiplayer";
+    };
+
+    /**
+     * The name for the specific entity/row.
+     */
+    debugEntityName(): string {
+        return this.GetEntityName();
+    };
+
+    /**
+     * The current value to display for the entity/row.
+     */
+    debugCurrentValue(): string {
+        return "0";
+    };
 }
 
 export class CPathTrack extends Entity {
