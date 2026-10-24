@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "esbuild src/index.ts --bundle --outfile=scripts/bundle.js --external:cs_script/point_script --format=esm --minify",
-    "watch": "esbuild src/index.ts --bundle --outfile=scripts/bundle.js --external:cs_script/point_script --format=esm --minify --watch"
+    "watch": "esbuild src/index.ts --bundle --outfile=scripts/bundle.js --external:cs_script/point_script --format=esm --minify --watch",
+    "build:hud": "node tools/generate-debug-layout.mjs",
+    "typecheck": "tsc --noEmit -p . && tsc --noEmit -p test",
+    "test": "node tools/generate-debug-layout.mjs --check && node test/run.mjs"
   },
   "keywords": [],
   "author": "",

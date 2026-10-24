@@ -1,0 +1,417 @@
+/*
+	typestrike debug menu - styles for layout/custom_game/typestrike_debug.xml.
+
+	DebugMenu (src/lib/ui/debugMenu) toggles these classes, per player:
+	  #tsd_menu           hidden (closed), interactive (player has the mouse cursor),
+	                      pos-right | pos-left | pos-center
+	  #tsd_tab_N          hidden (unused slot), on (active tab)
+	  #tsd_table          cols-1 .. cols-5 (number of visible columns)
+	  #tsd_row_N          hidden (no data), selected
+	  #tsd_empty          hidden
+	  #tsd_actions_N      hidden (no actions in that row)
+	  #tsd_action_N       hidden, on (toggle is on), off (needs a selected row), danger
+	  #tsd_prev/#tsd_next off (first / last page)
+
+	The whole menu hides itself while the scoreboard, buy menu, team menu or end-of-match
+	screen is open (classes CS2 sets on an ancestor panel).
+*/
+
+.TsdRoot
+{
+	width: 100%;
+	height: 100%;
+}
+
+.HUD_SCOREBOARD_VISIBLE .TsdRoot,
+.HUD_ENDOFMATCH_VISIBLE .TsdRoot,
+.HUD_TEAMMENU_VISIBLE .TsdRoot,
+.HUD_BUYMENU_VISIBLE .TsdRoot
+{
+	visibility: collapse;
+}
+
+.TsdRoot .hidden
+{
+	visibility: collapse;
+}
+
+/* ---- Menu frame ---- */
+
+.TsdMenu
+{
+	flow-children: down;
+	width: 560px;
+	vertical-align: top;
+	horizontal-align: right;
+	margin-top: 160px;
+	margin-right: 24px;
+	padding: 10px 14px 8px 14px;
+	background-color: #0d1117d9;
+	border: 1px solid #ffffff14;
+	border-top: 2px solid #5eead4;
+	font-family: Stratum2, 'Arial Unicode MS';
+	opacity: 0.9;
+	transition-property: opacity;
+	transition-duration: 0.12s;
+}
+
+.TsdMenu.pos-right
+{
+	horizontal-align: right;
+}
+
+.TsdMenu.pos-left
+{
+	horizontal-align: left;
+	margin-left: 24px;
+	margin-right: 0px;
+}
+
+.TsdMenu.pos-center
+{
+	horizontal-align: center;
+	margin-right: 0px;
+}
+
+/* With the mouse cursor the menu is fully opaque and buttons react to hover. */
+.TsdMenu.interactive
+{
+	opacity: 1;
+	background-color: #0d1117f2;
+	border-top: 2px solid #f5b83d;
+}
+
+/* ---- Header ---- */
+
+.TsdHeader
+{
+	flow-children: right;
+	width: 100%;
+	margin-bottom: 8px;
+}
+
+.TsdTitle
+{
+	width: fill-parent-flow( 1.0 );
+	vertical-align: center;
+	font-size: 15px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #e6edf3;
+}
+
+.TsdTime
+{
+	vertical-align: center;
+	margin-right: 10px;
+	font-family: 'Noto Mono';
+	font-size: 13px;
+	color: #8b949e;
+}
+
+.TsdIconButton
+{
+	height: 24px;
+	margin-left: 4px;
+	padding: 0px 8px;
+	border: 1px solid #ffffff26;
+	transition-property: background-color;
+	transition-duration: 0.1s;
+}
+
+.TsdIconLabel
+{
+	horizontal-align: center;
+	vertical-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	color: #8b949e;
+}
+
+.TsdMenu.interactive .TsdIconButton:hover
+{
+	background-color: #ffffff26;
+}
+
+.TsdMenu.interactive .TsdClose:hover
+{
+	background-color: #f85149;
+}
+
+.TsdMenu.interactive .TsdIconButton:hover .TsdIconLabel
+{
+	color: #ffffff;
+}
+
+.TsdMenu.interactive .TsdMouse
+{
+	background-color: #f5b83d;
+	border: 1px solid #f5b83d;
+}
+
+.TsdMenu.interactive .TsdMouse .TsdIconLabel
+{
+	color: #0d1117;
+}
+
+/* ---- Tabs ---- */
+
+.TsdTabs
+{
+	flow-children: right;
+	width: 100%;
+	margin-bottom: 6px;
+}
+
+.TsdTab
+{
+	width: fill-parent-flow( 1.0 );
+	margin-right: 3px;
+	padding: 5px 0px;
+	background-color: #ffffff0d;
+	border-bottom: 2px solid #00000000;
+	transition-property: background-color;
+	transition-duration: 0.1s;
+}
+
+.TsdMenu.interactive .TsdTab:hover
+{
+	background-color: #ffffff1f;
+}
+
+.TsdTab.on
+{
+	background-color: #5eead41f;
+	border-bottom: 2px solid #5eead4;
+}
+
+.TsdTabLabel
+{
+	horizontal-align: center;
+	font-size: 11px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #8b949e;
+}
+
+.TsdTab.on .TsdTabLabel
+{
+	color: #e6edf3;
+}
+
+/* ---- Table ---- */
+
+.TsdTable
+{
+	flow-children: down;
+	width: 100%;
+}
+
+.TsdRow
+{
+	flow-children: right;
+	width: 100%;
+	padding: 3px 6px 3px 4px;
+	border-left: 2px solid #00000000;
+}
+
+.TsdRow.odd
+{
+	background-color: #ffffff08;
+}
+
+.TsdMenu.interactive .TsdRow:hover
+{
+	background-color: #5eead41a;
+	border-left: 2px solid #5eead480;
+}
+
+.TsdRow.selected,
+.TsdMenu.interactive .TsdRow.selected:hover
+{
+	background-color: #f5b83d26;
+	border-left: 2px solid #f5b83d;
+}
+
+.TsdHead
+{
+	margin-bottom: 2px;
+	border-bottom: 1px solid #ffffff14;
+}
+
+.TsdCell
+{
+	width: fill-parent-flow( 1.0 );
+	margin-right: 6px;
+	vertical-align: center;
+	font-family: 'Noto Mono';
+	font-size: 13px;
+	color: #c9d1d9;
+}
+
+.TsdCell.c0
+{
+	width: fill-parent-flow( 1.6 );
+	font-family: Stratum2, 'Arial Unicode MS';
+	font-size: 14px;
+	color: #e6edf3;
+}
+
+.TsdHeadCell,
+.TsdHeadCell.c0
+{
+	font-family: Stratum2, 'Arial Unicode MS';
+	font-size: 11px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #8b949e;
+}
+
+.TsdRow.selected .TsdCell
+{
+	color: #ffffff;
+}
+
+/* Hide the columns a tab doesn't use; the visible ones share the width. */
+.TsdTable.cols-1 .c1, .TsdTable.cols-1 .c2, .TsdTable.cols-1 .c3, .TsdTable.cols-1 .c4,
+.TsdTable.cols-2 .c2, .TsdTable.cols-2 .c3, .TsdTable.cols-2 .c4,
+.TsdTable.cols-3 .c3, .TsdTable.cols-3 .c4,
+.TsdTable.cols-4 .c4
+{
+	visibility: collapse;
+}
+
+.TsdEmpty
+{
+	width: 100%;
+	padding: 14px 0px;
+	text-align: center;
+	font-size: 13px;
+	color: #6e7681;
+}
+
+/* ---- Actions ---- */
+
+.TsdActionRow
+{
+	flow-children: right;
+	width: 100%;
+	margin-top: 6px;
+}
+
+.TsdAction
+{
+	width: fill-parent-flow( 1.0 );
+	margin-right: 4px;
+	padding: 6px 0px;
+	background-color: #ffffff12;
+	border: 1px solid #ffffff14;
+	transition-property: background-color;
+	transition-duration: 0.1s;
+}
+
+.TsdMenu.interactive .TsdAction:hover
+{
+	background-color: #ffffff29;
+}
+
+.TsdAction.on
+{
+	background-color: #5eead4;
+	border: 1px solid #5eead4;
+}
+
+.TsdMenu.interactive .TsdAction.on:hover
+{
+	background-color: #99f6e4;
+}
+
+.TsdAction.off
+{
+	opacity: 0.35;
+}
+
+.TsdActionLabel
+{
+	horizontal-align: center;
+	font-size: 11px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #c9d1d9;
+}
+
+.TsdAction.on .TsdActionLabel
+{
+	color: #0d1117;
+}
+
+.TsdAction.danger .TsdActionLabel
+{
+	color: #ff7b72;
+}
+
+.TsdMenu.interactive .TsdAction.danger:hover
+{
+	background-color: #f8514940;
+}
+
+/* ---- Footer ---- */
+
+.TsdFooter
+{
+	flow-children: right;
+	width: 100%;
+	margin-top: 8px;
+}
+
+.TsdPageButton
+{
+	width: 24px;
+	height: 22px;
+	border: 1px solid #ffffff26;
+	transition-property: background-color;
+	transition-duration: 0.1s;
+}
+
+.TsdMenu.interactive .TsdPageButton:hover
+{
+	background-color: #ffffff26;
+}
+
+.TsdPageButton.off
+{
+	opacity: 0.3;
+}
+
+.TsdPage
+{
+	vertical-align: center;
+	margin: 0px 8px;
+	font-family: 'Noto Mono';
+	font-size: 12px;
+	color: #8b949e;
+}
+
+.TsdStatus
+{
+	width: fill-parent-flow( 1.0 );
+	vertical-align: center;
+	margin-left: 10px;
+	text-align: right;
+	font-size: 12px;
+	color: #5eead4;
+}
+
+.TsdHint
+{
+	width: 100%;
+	margin-top: 6px;
+	font-size: 10px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #6e7681;
+}

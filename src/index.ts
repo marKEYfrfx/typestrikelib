@@ -1,36 +1,79 @@
 /**
- * Entry Point File
+ * Example map script. `npm run build` bundles this file and the library into scripts/bundle.js.
+ *
+ * Map setup (Hammer):
+ * - a point_script whose cs_script is scripts/bundle.vjs
+ * - a custom_hud_layout named "typestrike_debug" whose layout is
+ *   panorama/layout/custom_game/typestrike_debug.vxml (for the debug menu)
+ *
+ * In game: type !debug in chat (or ts_debug in the console with sv_cheats 1) to open the menu,
+ * press F (inspect) or click MOUSE for the cursor.
  */
-import { Entity, Instance } from "cs_script/point_script";
-import { CDebugMenu } from "./CDebugMenu";
-import { CPropPhysicsMultiplayer } from "./HammerEntities";
+import {
+    CSInputs,
+    ChatCommands,
+    DebugMenu,
+    Events,
+    Logger,
+    Pawn,
+    Vec,
+    describeEntity,
+    entityTab,
+    findAllByClass,
+    getAimTarget,
+    getPlayerName,
+    playersTab,
+    toolsTab,
+} from "./lib";
 
-const g_debugMenu : CDebugMenu = new CDebugMenu();
+const log = new Logger("typestrikelib");
 
-var props : CPropPhysicsMultiplayer[] = new Array();
+// ---------------------------------------------------------------- debug menu
 
-var ent1 : Entity | undefined = Instance.FindEntityByName("prop1");
-var ent2 : Entity | undefined = Instance.FindEntityByName("prop2");
-var ent3 : Entity | undefined = Instance.FindEntityByName("prop3");
-var ent4 : Entity | undefined = Instance.FindEntityByName("skkkkkeeeeeeeeeeeeeeeeeet");
-Object.setPrototypeOf(ent1, CPropPhysicsMultiplayer.prototype);
-Object.setPrototypeOf(ent2, CPropPhysicsMultiplayer.prototype);
-Object.setPrototypeOf(ent3, CPropPhysicsMultiplayer.prototype);
-Object.setPrototypeOf(ent4, CPropPhysicsMultiplayer.prototype);
-const prop1 = ent1 as CPropPhysicsMultiplayer;
-const prop2 = ent2 as CPropPhysicsMultiplayer;
-const prop3 = ent3 as CPropPhysicsMultiplayer;  
-const prop4 = ent4 as CPropPhysicsMultiplayer;  
-props.push(prop1);
-props.push(prop2);
-props.push(prop3);
-props.push(prop4);
+const debug = new DebugMenu({ cursorKey: CSInputs.LOOK_AT_WEAPON });
 
-g_debugMenu.addColumn(props);
+debug.addTab(playersTab());
+debug.addTab(
+    entityTab("Props", () => [
+        ...findAllByClass("prop_physics_multiplayer"),
+        ...findAllByClass("prop_physics"),
+        ...findAllByClass("prop_dynamic"),
+    ]),
+);
+// Every entity with a targetname, nearest first: handy for exploring a map.
+debug.addTab(entityTab("Named", { name: "*" }));
+debug.addTab(toolsTab());
 
-Instance.SetThink(() => {
-    g_debugMenu.displayGameTime();
-    g_debugMenu.displayColumns();
-    Instance.SetNextThink(Instance.GetGameTime() + 0.125);
+// Per-viewer live values in the Watch tab.
+debug.watch("Speed", ({ pawn }) => (pawn ? Math.round(Pawn.speed2D(pawn)) : "-"));
+debug.watch("On ground", ({ pawn }) => (pawn ? Pawn.isOnGround(pawn) : "-"));
+debug.watch("Position", ({ pawn }) => pawn?.GetAbsOrigin());
+debug.watch("Looking at", ({ pawn }) => {
+    const target = pawn && getAimTarget(pawn, 4096);
+    return target ? describeEntity(target) : "nothing";
 });
-Instance.SetNextThink(Instance.GetGameTime());
+
+// ---------------------------------------------------------------- a few chat commands
+
+ChatCommands.enableHelp();
+
+ChatCommands.register("hp", {
+    description: "Set your health",
+    usage: "[amount]",
+    requireAlive: true,
+    handler: (ctx) => {
+        const hp = ctx.int(0, 100)!;
+        ctx.pawn!.SetHealth(hp);
+        debug.setStatus(ctx.player, `Health set to ${hp}`);
+    },
+});
+
+ChatCommands.register("where", {
+    description: "Print your position",
+    requireAlive: true,
+    handler: (ctx) => ctx.reply(Vec.format(ctx.pawn!.GetAbsOrigin())),
+});
+
+Events.on("PlayerActivate", ({ player }) => log.info(getPlayerName(player), "joined - type !debug for the debug menu"));
+
+log.info("loaded");
