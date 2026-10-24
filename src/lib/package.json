@@ -1,0 +1,6 @@
+{
+  "name": "typestrike",
+  "private": true,
+  "description": "Helper library for CS2 cs_script (point_script). Lets esbuild drop the modules a script doesn't use.",
+  "sideEffects": false
+}
