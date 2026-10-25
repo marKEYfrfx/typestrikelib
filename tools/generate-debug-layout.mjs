@@ -35,7 +35,8 @@ out(`${t(2)}src/lib/ui/debugMenu/layout.ts: change the sizes there and run "npm 
 out(`${t(2)}instead of editing this file. Every Label's text is a dialog variable named like its id,`);
 out(`${t(2)}filled in by DebugMenu. Classes it toggles are listed in typestrike_debug.css.`);
 out(`${t(1)}-->`);
-out(`${t(1)}<Panel id="${id.root}" class="TsdRoot" hittest="false">`);
+// The root panel must not have an id: CS2's resource compiler rejects it.
+out(`${t(1)}<Panel class="TsdRoot" hittest="false">`);
 out(`${t(2)}<Panel id="${id.menu}" class="TsdMenu hidden pos-right" hittest="false">`);
 
 // Header: title, game time, mouse toggle, close
