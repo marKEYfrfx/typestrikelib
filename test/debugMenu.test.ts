@@ -19,6 +19,10 @@ test("every label and button DebugMenu uses exists in the XML", () => {
     const ids = [...layoutXml.matchAll(/ id="([^"]+)"/g)].map((m) => m[1]);
     eq(new Set(ids).size, ids.length, "ids are unique");
     ok(/<Panel id="tsd_menu" class="[^"]*\bhidden\b/.test(layoutXml), "menu starts hidden");
+    // CS2's resource compiler: "Found root panel with 'id' attribute, which is not permitted."
+    const rootPanel = /<\/styles>(?:\s|<!--[\s\S]*?-->)*<(\w+)([^>]*)>/.exec(layoutXml);
+    ok(rootPanel && rootPanel[1] === "Panel", "a single root Panel after the styles");
+    ok(rootPanel && !/\bid=/.test(rootPanel[2]), `root panel has no id: <${rootPanel?.[1]}${rootPanel?.[2]}>`);
     ok(layoutXml.includes('src="file://{resources}/styles/custom_game/typestrike_debug.css"'), "includes the stylesheet");
     eq((layoutXml.match(/<Button id="tsd_row_/g) ?? []).length, DEBUG_LAYOUT.rows);
 });

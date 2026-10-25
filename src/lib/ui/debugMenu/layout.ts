@@ -24,9 +24,11 @@ export const DEBUG_LAYOUT = {
     actionsPerRow: 4,
 } as const;
 
-/** Panel ids. Label ids double as their dialog variable names (`text="{s:<id>}"`). */
+/**
+ * Panel ids. Label ids double as their dialog variable names (`text="{s:<id>}"`).
+ * The layout's root panel has no id: CS2's resource compiler rejects one there.
+ */
 export const DebugIds = {
-    root: "tsd_root",
     menu: "tsd_menu",
     title: "tsd_title",
     time: "tsd_time",

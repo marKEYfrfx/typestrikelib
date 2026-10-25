@@ -9,7 +9,7 @@
 		instead of editing this file. Every Label's text is a dialog variable named like its id,
 		filled in by DebugMenu. Classes it toggles are listed in typestrike_debug.css.
 	-->
-	<Panel id="tsd_root" class="TsdRoot" hittest="false">
+	<Panel class="TsdRoot" hittest="false">
 		<Panel id="tsd_menu" class="TsdMenu hidden pos-right" hittest="false">
 			<Panel class="TsdHeader" hittest="false">
 				<Label id="tsd_title" class="TsdTitle" hittest="false" text="{s:tsd_title}" />
