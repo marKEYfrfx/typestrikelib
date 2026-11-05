@@ -1,6 +1,6 @@
 # typestrikelib public release: design
 
-Nov 5, 2026 · Approved by Mark section by section. Phase 1 is in progress; the restructure hasn't started and nothing new has run in game.
+Nov 5, 2026 · Approved by Mark section by section. Phase 1 is done; the baseline and restructure haven't started and nothing new has run in game.
 
 ## Goal
 
@@ -163,7 +163,7 @@ GitHub Actions runs the typecheck, the mock tests and a packaging test: `npm pac
 
 Remove the whole `maps/` folder from history, because the library repo no longer holds maps, and this takes any Valve-derived content out of the public history. The repo had no forks or stars when checked on Nov 5, 2026. Publishing the rewrite requires a force-push, so get Mark's confirmation at that step.
 
-That removes `maps/cs_script_demo.vmap`, `maps/content_examples/lighting_info.vmap`, `maps/typestrikelib.vmap` (three versions, about 68 MB each) and Valve's sample types in `maps/scripts/`. Whether each map derives from Valve's samples is unconfirmed, and this decision doesn't depend on it.
+That removes `maps/cs_script_demo.vmap`, `maps/content_examples/lighting_info.vmap`, `maps/typestrikelib.vmap` (three versions, about 68 MB each) and Valve's sample types in `maps/scripts/`. Whether each map derives from Valve's samples is unconfirmed, and this decision doesn't depend on it. Valve's demo HUD files, `panorama/layout/custom_game/welcome.xml` and `panorama/styles/custom_game/welcome.css`, were removed from history too, because nothing in the library used them.
 
 GlobalDefensive's public repo also tracks `cs_script_demo.vmap`, `lighting_info.vmap` and `script_zoo.vmap`. That is outside this rewrite and needs its own decision.
 

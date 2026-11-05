@@ -97,7 +97,7 @@ The menu sits on the right of the screen and doesn't block movement. Switch on t
 
 ![Debug menu preview](docs/debug-menu-preview.png)
 
-**Map setup (once):** in Hammer, add a `custom_hud_layout` entity named `typestrike_debug` and set its layout to `panorama/layout/custom_game/typestrike_debug.vxml`. The XML and CSS live in this addon's `panorama/` folder and are compiled like Valve's `welcome.xml`.
+**Map setup (once):** in Hammer, add a `custom_hud_layout` entity named `typestrike_debug` and set its layout to `panorama/layout/custom_game/typestrike_debug.vxml`. The XML and CSS live in this addon's `panorama/` folder and are compiled like the `welcome.xml` in Valve's `cs_script_demo` addon.
 
 ```ts
 import { CSInputs } from "cs_script/point_script";
