@@ -152,11 +152,17 @@ To change the number of tabs, rows, columns or actions, edit `src/lib/ui/debugMe
 - **Custom HUD layouts are fixed.** Labels take plain text through `{s:variable}` dialog variables, and there is no client-side scripting. So a layout needs a slot for everything it might show, and the script fills those slots and toggles classes. The layout's root panel must not have an `id` (the resource compiler rejects it).
 - **There's no per-player chat print.** `Chat.say` uses the server `say` command, which goes to everyone. For per-player text, use a `HudLayout` (or `DebugMenu.setStatus`), or pass your own function to `ChatCommands.setReplyHandler`.
 - **Named imports from `cs_script/point_script` are all-or-nothing.** If your CS2 build doesn't export a name you import (`import { GameRules } from ...`), the whole script fails to load. The library reads every engine value through one namespace import (`src/lib/core/engine.ts`) instead, so a missing export only breaks the feature that uses it, and a warning names it at load. Import `CSInputs`, `GameRules`, etc. from `"./lib"` to get the same safety in your own code. Types can still come from `cs_script/point_script`.
+- **There's no ICU.** cs_script's V8 is built without it, so `String.prototype.localeCompare` throws `RangeError: Internal error. Icu error.` in game. Sort text with `compareText` instead. The mock throws the same error, so `npm test` catches it. Other locale-aware calls (`toLocaleString`, `Intl`) probably fail too, but that hasn't been checked.
+- **Optional engine arguments can't be `undefined`.** `PointTemplate.ForceSpawn(origin?, angle?)` throws `bad value for argument 1 (angle). Got undefined.` in game when called as `ForceSpawn(origin, undefined)`, so `spawnTemplate` passes only the arguments you set. Other optional parameters in `point_script.d.ts` may behave the same; that hasn't been checked. The mock's `ForceSpawn` throws the same way.
 - **Tree shaking.** `src/lib/package.json` marks the library side-effect free, so esbuild only bundles what your script uses.
 
 ## Tests
 
 `npm test` bundles each `test/*.test.ts` with esbuild, swapping in `test/mock/point_script.ts` (a fake runtime with game time, thinks, entities, players, convars and save data), and runs it in Node. `test/example.test.ts` runs `src/index.ts` itself against the mock. The mock's `CustomHudLayout` reads the real layout XML and tracks what each player sees, so the debug menu tests check what's on screen.
+
+## License
+
+[MIT](LICENSE). `point_script.d.ts` is Valve's file and isn't covered by this license.
 
 ## Inspiration
 
