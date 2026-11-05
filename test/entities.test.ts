@@ -134,6 +134,22 @@ test("spawnTemplate finds parts by name prefix", () => {
     throws(() => spawnTemplate("crate_1"), /not a point_template/);
 });
 
+test("spawnTemplate never passes ForceSpawn an undefined argument", () => {
+    const tpl: any = addEntity(new PointTemplate(), "template.spawn_args", "point_template");
+    tpl.origin = { x: 1, y: 2, z: 3 };
+    tpl.spawns = () => [addEntity(new Entity(), "spawned", "info_target")];
+    const at = { x: 10, y: 0, z: 0 };
+    const facing = { pitch: 0, yaw: 90, roll: 0 };
+    ok(spawnTemplate(tpl));
+    deepEq(tpl.lastSpawnArgs, []);
+    ok(spawnTemplate(tpl, { origin: at }));
+    deepEq(tpl.lastSpawnArgs, [at]);
+    ok(spawnTemplate(tpl, { origin: at, angles: facing }));
+    deepEq(tpl.lastSpawnArgs, [at, facing]);
+    ok(spawnTemplate(tpl, { angles: facing }), "angles alone");
+    deepEq(tpl.lastSpawnArgs, [tpl.origin, facing], "angles alone spawn at the template's position");
+});
+
 test("type guards", () => {
     ok(isPlayerPawn(new CSPlayerPawn()));
     ok(!isPlayerPawn(crate));

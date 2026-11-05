@@ -54,7 +54,11 @@ export function spawnTemplate(template: PointTemplate | string, options: { origi
     } else {
         t = template;
     }
-    const spawned = t.ForceSpawn(options.origin, options.angles);
+    // The game throws on an explicit `undefined` argument, though both are optional: pass only
+    // what is set. Angles without an origin spawn at the template's own position.
+    const { origin, angles } = options;
+    const spawned =
+        angles !== undefined ? t.ForceSpawn(origin ?? t.GetAbsOrigin(), angles) : origin !== undefined ? t.ForceSpawn(origin) : t.ForceSpawn();
     if (!spawned || spawned.length === 0) return undefined;
     return new SpawnedGroup(spawned);
 }

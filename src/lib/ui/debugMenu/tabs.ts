@@ -11,6 +11,7 @@ import { add, distance, format, vec } from "../../math/vector";
 import * as Pawn from "../../players/pawn";
 import { getPawn, getPlayers } from "../../players/players";
 import { canPlayerFit } from "../../world/trace";
+import { compareText } from "../../util/text";
 import { formatTime } from "../../util/time";
 import type { DebugAction, DebugCell, DebugContext, DebugRow, DebugTab } from "./DebugMenu";
 
@@ -222,7 +223,7 @@ export function playersTab(title = "Players"): DebugTab<CSPlayerController> {
         empty: "No players",
         rows: () =>
             getPlayers()
-                .sort((a, b) => a.GetTeamNumber() - b.GetTeamNumber() || a.GetPlayerName().localeCompare(b.GetPlayerName()))
+                .sort((a, b) => a.GetTeamNumber() - b.GetTeamNumber() || compareText(a.GetPlayerName(), b.GetPlayerName()))
                 .map((c) => {
                     const pawn = c.GetPlayerPawn();
                     const alive = !!pawn && pawn.IsValid() && pawn.IsAlive();

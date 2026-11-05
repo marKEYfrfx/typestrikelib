@@ -146,3 +146,4 @@ export { SaveStore } from "./util/save";
 export type { SaveStoreOptions } from "./util/save";
 export { Stopwatch, Cooldown, formatTime, gameTime } from "./util/time";
 export { compact } from "./util/object";
+export { compareText } from "./util/text";

@@ -2,6 +2,7 @@ import type { CSPlayerController, CSPlayerPawn } from "cs_script/point_script";
 import { Events, type Unsubscribe } from "../core/events";
 import { libLog } from "../core/log";
 import { teamShortName } from "../game/constants";
+import { compareText } from "../util/text";
 import { Cooldown } from "../util/time";
 import { Chat } from "./chat";
 import { findPlayer, getPlayerName } from "./players";
@@ -137,7 +138,7 @@ export class CommandRouter {
 
     /** Registered commands, sorted by name. */
     list(): readonly (CommandDefinition & { name: string })[] {
-        return [...this.commands.values()].sort((a, b) => a.name.localeCompare(b.name));
+        return [...this.commands.values()].sort((a, b) => compareText(a.name, b.name));
     }
 
     has(name: string): boolean {

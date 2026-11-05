@@ -9,6 +9,13 @@ type QAngle = { pitch: number; yaw: number; roll: number };
 
 const TICK = 1 / 64;
 
+// cs_script's V8 has no ICU, so localeCompare throws in game. Throw the same error here, so a
+// test fails instead of the map. (Only localeCompare has been seen failing; other locale-aware
+// calls such as toLocaleString or Intl probably fail too, but that is unverified.)
+String.prototype.localeCompare = function (): number {
+    throw new RangeError("Internal error. Icu error. (cs_script has no ICU: use compareText)");
+};
+
 export const mock = {
     time: 0,
     think: undefined as (() => void) | undefined,
@@ -159,7 +166,16 @@ export class CSPlayerController extends Entity {
 
 export class PointTemplate extends Entity {
     spawns: () => Entity[] = () => [];
-    ForceSpawn() { return this.spawns(); }
+    /** The arguments of the last ForceSpawn call. */
+    lastSpawnArgs: unknown[] = [];
+    // Like the game, an explicit undefined argument throws even though both are optional.
+    ForceSpawn(...args: unknown[]) {
+        args.forEach((a, i) => {
+            if (a === undefined) throw new TypeError(`Method PointTemplate.ForceSpawn invoked with bad value for argument ${i} (${i === 0 ? "origin" : "angle"}). Got undefined.`);
+        });
+        this.lastSpawnArgs = args;
+        return this.spawns();
+    }
 }
 
 /**

@@ -2,6 +2,7 @@ import { deepEq, eq, ok, test } from "./harness";
 import { addPlayer, mock } from "./mock/point_script";
 import { CommandRouter, ChatCommands, tokenize } from "../src/lib/players/commands";
 import { Chat, sanitizeCommandText } from "../src/lib/players/chat";
+import { compareText } from "../src/lib/util/text";
 export { run } from "./harness";
 
 const alice = addPlayer(0, "Alice", 2);
@@ -100,4 +101,16 @@ test("sanitizeCommandText blocks command injection", () => {
     const before = mock.serverCommands.length;
     Chat.say(" ; ");
     eq(mock.serverCommands.length, before, "empty message not sent");
+});
+
+test("list() sorts without localeCompare, which cs_script lacks", () => {
+    const router = new CommandRouter();
+    router.register("b", () => {});
+    router.register("A", () => {});
+    router.register("c", () => {});
+    eq(router.list().map((c) => c.name).join(","), "a,b,c");
+});
+
+test("compareText ignores case and needs no ICU", () => {
+    eq(["bob", "Alice", "alice", "Carl"].sort(compareText).join(","), "Alice,alice,bob,Carl");
 });
